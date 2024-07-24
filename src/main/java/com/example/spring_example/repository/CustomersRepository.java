@@ -7,4 +7,5 @@ import java.util.List;
 public interface CustomersRepository {
     List<CustomerEntity> findAll();
     CustomerEntity create(CustomerEntity customerEntity);
+    CustomerEntity changeCustomerEmail(CustomerEntity entity);
 }

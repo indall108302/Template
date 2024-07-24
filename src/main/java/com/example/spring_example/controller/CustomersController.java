@@ -3,10 +3,7 @@ package com.example.spring_example.controller;
 import com.example.spring_example.dto.CustomerCreateRequest;
 import com.example.spring_example.dto.CustomerResponse;
 import com.example.spring_example.service.CustomerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +23,11 @@ public class CustomersController {
     @PostMapping("/customers")
     public CustomerResponse createUser(@RequestBody CustomerCreateRequest request) {
         return customerService.createUser(request);
+    }
+
+    @PutMapping("/customer/{email}")
+    public CustomerResponse changeCustomerEmail(@PathVariable("email") String email,
+                                                @RequestBody CustomerCreateRequest request){
+        return customerService.changeCustomerEmail(request);
     }
 }

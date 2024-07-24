@@ -47,4 +47,8 @@ public class CustomerService {
                 true
         );
     }
+
+    public CustomerResponse changeCustomerEmail(CustomerCreateRequest request) {
+        return toResponse(customersRepository.changeCustomerEmail(toEntity(request)));
+    }
 }

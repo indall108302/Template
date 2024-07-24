@@ -29,17 +29,7 @@ public class DbCustomersRepository implements CustomersRepository {
         String sql = "select * from customer";
         return jdbcTemplate.query(
                 sql,
-                new RowMapper<CustomerEntity>() {
-                    @Override
-                    public CustomerEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        CustomerEntity customerEntity = new CustomerEntity();
-                        customerEntity.setId(rs.getInt("id"));
-                        customerEntity.setEmail(rs.getString("email"));
-                        customerEntity.setActive(rs.getBoolean("is_active"));
-                        customerEntity.setRegisterDate(rs.getObject("created_at", LocalDateTime.class));
-                        return customerEntity;
-                    }
-                }
+                new CustomerRowMapper()
         );
     }
 
@@ -58,17 +48,7 @@ public class DbCustomersRepository implements CustomersRepository {
             sql = "select * from customer where email=?";
             CustomerEntity newCustomer = jdbcTemplate.queryForObject(
                     sql,
-                    new RowMapper<CustomerEntity>() {
-                        @Override
-                        public CustomerEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-                            CustomerEntity customerEntity = new CustomerEntity();
-                            customerEntity.setId(rs.getInt("id"));
-                            customerEntity.setEmail(rs.getString("email"));
-                            customerEntity.setActive(rs.getBoolean("is_active"));
-                            customerEntity.setRegisterDate(rs.getObject("created_at", LocalDateTime.class));
-                            return customerEntity;
-                        }
-                    },
+                    new CustomerRowMapper(),
                     customerEntity.getEmail());
             return newCustomer;
         } catch (IncorrectResultSetColumnCountException e) {
@@ -76,4 +56,8 @@ public class DbCustomersRepository implements CustomersRepository {
         }
     }
 
+    @Override
+    public CustomerEntity changeCustomerEmail(CustomerEntity entity) {
+        return null;
+    }
 }

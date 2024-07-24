@@ -24,5 +24,10 @@ public class InMemoryCustomerRepository implements CustomersRepository {
         return customerEntity;
     }
 
-
+    @Override
+    public CustomerEntity changeCustomerEmail(CustomerEntity customerEntity) {
+        int id = customerEntity.getId();
+        db.set(id, customerEntity);
+        return customerEntity;
+    }
 }
