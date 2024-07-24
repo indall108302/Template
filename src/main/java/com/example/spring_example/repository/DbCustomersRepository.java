@@ -27,19 +27,50 @@ public class DbCustomersRepository implements CustomersRepository {
     @Override
     public List<CustomerEntity> findAll() {
         String sql = "select * from customer";
-        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(CustomerEntity.class));
+        return jdbcTemplate.query(
+                sql,
+                new RowMapper<CustomerEntity>() {
+                    @Override
+                    public CustomerEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        CustomerEntity customerEntity = new CustomerEntity();
+                        customerEntity.setId(rs.getInt("id"));
+                        customerEntity.setEmail(rs.getString("email"));
+                        customerEntity.setActive(rs.getBoolean("is_active"));
+                        customerEntity.setRegisterDate(rs.getObject("created_at", LocalDateTime.class));
+                        return customerEntity;
+                    }
+                }
+        );
     }
 
     @Override
     public CustomerEntity create(CustomerEntity customerEntity) {
         String sql = "INSERT INTO customer(email, created_at, is_active) values(?,?,?)";
-        jdbcTemplate.update(sql, new CustomerEntity(
-                customerEntity.getEmail(), customerEntity.getRegisterDate(), customerEntity.isActive())
+        jdbcTemplate.update(sql,
+                new Object[]{
+                        customerEntity.getEmail(),
+                        customerEntity.getRegisterDate(),
+                        customerEntity.isActive()
+                }
         );
 
         try {
-            sql = "select * from customer where email = ?";
-            return jdbcTemplate.queryForObject(sql, new Object[]{customerEntity.getEmail()}, new BeanPropertyRowMapper<>(CustomerEntity.class));
+            sql = "select * from customer where email=?";
+            CustomerEntity newCustomer = jdbcTemplate.queryForObject(
+                    sql,
+                    new RowMapper<CustomerEntity>() {
+                        @Override
+                        public CustomerEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+                            CustomerEntity customerEntity = new CustomerEntity();
+                            customerEntity.setId(rs.getInt("id"));
+                            customerEntity.setEmail(rs.getString("email"));
+                            customerEntity.setActive(rs.getBoolean("is_active"));
+                            customerEntity.setRegisterDate(rs.getObject("created_at", LocalDateTime.class));
+                            return customerEntity;
+                        }
+                    },
+                    customerEntity.getEmail());
+            return newCustomer;
         } catch (IncorrectResultSetColumnCountException e) {
             return null;
         }

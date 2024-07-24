@@ -8,6 +8,20 @@ public class CustomerEntity {
     private LocalDateTime registerDate;
     private boolean isActive;
 
+    public CustomerEntity() {}
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setRegisterDate(LocalDateTime registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     public CustomerEntity(Integer id, String email, LocalDateTime registerDate, boolean isActive) {
         this(email, registerDate, isActive);
         this.id = id;
@@ -38,4 +52,5 @@ public class CustomerEntity {
     public void setId(Integer id) {
         this.id = id;
     }
+
 }

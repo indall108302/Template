@@ -20,8 +20,8 @@ public class DbConfig {
     ) {
         PGSimpleDataSource ds = new PGSimpleDataSource();
         ds.setUrl(url);
-        ds.setPassword(user);
-        ds.setUser(password);
+        ds.setPassword(password);
+        ds.setUser(user);
 
         return ds;
     }
